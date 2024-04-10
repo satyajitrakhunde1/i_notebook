@@ -4,7 +4,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const router = express.Router();
-const JWT_SECRET ="satyajits_secret_key"
+const JWT_SECRET = "satyajits_secret_key";
 
 router.use(express.json()); // Middleware for body parser
 
@@ -28,32 +28,66 @@ router.post('/createuser', [
             return res.status(400).json({ error: "Sorry, a user with this email already exists" });
         }
 
-//adding salt to password (npm package bcryptjs)
-const salt = await bcrypt.genSalt(10); // Generate salt
-        const secpass = await bcrypt.hash(req.body.password, salt);
+        // Hash the password //adding salt 
+        const salt = await bcrypt.genSalt(10); // Generate salt
+        const hashedPassword = await bcrypt.hash(req.body.password, salt);
 
         // If the user does not exist, create a new user
         user = await User.create({
             name: req.body.name,
-            password:secpass,
+            password: hashedPassword,
             email: req.body.email,
         });
 
-//using jwt token 
-const data ={user:{id:user.id}}
+        // Create and sign JWT token
+        const tokenData = { user: { id: user.id } };
+        const authToken = jwt.sign(tokenData, JWT_SECRET);
+        res.json({ authToken });
 
-const authtoken =jwt.sign(data,JWT_SECRET);
-console.log(authtoken)
-res.json({authtoken})
-
-
-        // Success response
-        // res.json(user);
     } catch (err) {
         console.error(err.message);
-        res.status(500).json({ error: 'some error occured' });
-m 
-        // res.status(500).json({ error: 'Please enter a unique value for email' });
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+
+
+// Authenticate a user using POST "/api/auth/login".
+router.post('/login', [
+    body('email', 'Enter a valid email').isEmail(),
+    body('password', 'Password cannot be blank').exists(),
+], async (req, res) => {
+    // If there are errors, return Bad Request and errors
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
+    const { email, password } = req.body;
+
+    try {
+        // Find the user by email
+        let user = await User.findOne({ email });
+
+        if (!user) {
+            return res.status(400).json({ error: "Invalid credentials" });
+        }
+
+        // Compare passwords
+        const passwordMatch = await bcrypt.compare(password, user.password);
+
+        if (!passwordMatch) {
+            return res.status(400).json({ error: "Invalid credentials" });
+        }
+
+        // Create and sign JWT token
+        const tokenData = { user: { id: user.id } };
+        const authToken = jwt.sign(tokenData, JWT_SECRET);
+        res.json({ authToken });
+
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).json({ error: 'Internal server error' });
     }
 });
 
