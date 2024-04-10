@@ -5,10 +5,11 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const router = express.Router();
 const JWT_SECRET = "satyajits_secret_key";
+const fetchuser =require('../middleware/fetchuser')
 
 router.use(express.json()); // Middleware for body parser
 
-// Create a user using POST "/api/auth/createuser". No login required
+//ROUTE 1 : Create a user using POST "/api/auth/createuser". No login required
 router.post('/createuser', [
     body('name', 'Enter a valid name').isLength({ min: 3 }),
     body('password', 'Enter a valid password').isLength({ min: 5 }),
@@ -52,7 +53,7 @@ router.post('/createuser', [
 
 
 
-// Authenticate a user using POST "/api/auth/login".
+// ROUTE 2 :Authenticate a user using POST "/api/auth/login".
 router.post('/login', [
     body('email', 'Enter a valid email').isEmail(),
     body('password', 'Password cannot be blank').exists(),
@@ -90,5 +91,28 @@ router.post('/login', [
         res.status(500).json({ error: 'Internal server error' });
     }
 });
+
+
+
+
+// ROUTE 3 :get logged in user details  using POST "/api/auth/getuser".
+router.post('/getuser',fetchuser,async (req,res)=>{
+
+try {
+    userId=req.user.id;
+    const user =await User.findById(userId).select("-password")  //it will omit password (-password )means
+    res.send(user)
+} catch (error) {
+    console.error(error.message);
+    res.status(500).send("Internal server Error")
+    
+}
+
+
+
+
+})
+
+
 
 module.exports = router;
