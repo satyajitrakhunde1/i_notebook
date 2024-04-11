@@ -9,10 +9,10 @@ router.use(express.json());
 // ROUTE 1: Get logged-in user details using GET "/api/notes/fetchallnotes". Login required
 router.get('/fetchallnotes', fetchuser, async (req, res) => {
     try {
-        const notes = await Note.find({ user: req.user.id });  
+        const notes = await Note.find({ user: req.user.id });
         res.json(notes);
     } catch (error) {
-        console.error(error.message); 
+        console.error(error.message);
         res.status(500).json({ error: 'Internal server error' });
     }
 });
@@ -24,13 +24,13 @@ router.post('/addnote', fetchuser, [
 ], async (req, res) => {
     try {
         const { title, description, tag } = req.body;
-        
+
         // If there are errors, return Bad Request and errors
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
         }
-        
+
         // If no errors, add a new note
         const note = new Note({
             title,
@@ -38,7 +38,7 @@ router.post('/addnote', fetchuser, [
             tag,
             user: req.user.id
         });
-        
+
         const saveNote = await note.save();
         res.json(saveNote);
     } catch (error) {
@@ -74,5 +74,30 @@ router.put('/updatenote/:id', fetchuser, async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 });
+
+
+// ROUTE 4: delete an existing note using DELETE "/api/notes/deletenote/:id". Login required
+router.delete('/deletenote/:id', fetchuser, async (req, res) => {
+   
+    // Find the note to be delete and delete it
+    try {
+        let note = await Note.findById(req.params.id);
+        if (!note) {
+            return res.status(404).send("Not found ");
+        }
+        //allow deletion only if user own this note
+        if (note.user.toString() !== req.user.id) {
+            return res.status(401).send("Not allowed");
+        }
+
+        note = await Note.findByIdAndDelete(req.params.id);
+        res.json({ success: "Note has been deleted", note: note });
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+
 
 module.exports = router;
