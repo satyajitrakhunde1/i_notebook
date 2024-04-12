@@ -1,13 +1,11 @@
-import React, { useContext } from 'react';
-import noteContext from '../context/noteContext';
+import React from 'react';
 
 const About = () => {
-  const a = useContext(noteContext); // Corrected useContext spelling
   
   return (
     <div>
-     <h1>this is about {a.name}</h1>
-     <h1>this is about {a.class}</h1>
+     <h1>this is about page</h1>
+     
     </div>
   );
 }

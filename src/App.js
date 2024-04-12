@@ -1,4 +1,3 @@
-import './App.css';
 import React from 'react'
 import Home from './component/Home';
 import About from './component/About';
@@ -14,10 +13,12 @@ function App() {
 <NoteState>
 <Router>
 <Navbar/>
+<div className="container">
   <Routes>
     <Route exact path="/about" element={<About />} />
     <Route  exact path="/" element={<Home />} />
   </Routes>
+  </div>
 </Router>
 </NoteState>
 
