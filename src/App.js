@@ -4,6 +4,7 @@ import About from './component/About';
 import Navbar from './component/Navbar';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import NoteState from '../src/context/NoteState'
+import Alert from './component/Alert';
 // import ReactDOM from 'react-dom'
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
 <NoteState>
 <Router>
 <Navbar/>
+<Alert message="this is message"/>
 <div className="container">
   <Routes>
     <Route exact path="/about" element={<About />} />
