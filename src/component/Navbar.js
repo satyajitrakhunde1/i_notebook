@@ -5,9 +5,9 @@ const Navbar = () => {
   // Getting the location (like "/" "/about"). We can write logic accordingly
   let location = useLocation();
 
-  useEffect(() => {
+  // useEffect(() => {
     console.log(location.pathname);
-  }, [location]);
+  // }, [location]);
 
   return (
     <div>
@@ -30,13 +30,13 @@ const Navbar = () => {
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav mr-auto">
             <li className="nav-item active">
-              <Link className={`nav-link ${location.pathname === '/' ? 'active' : ''}`} to="/">
+              <Link className={`nav-link ${location.pathname === '/' ? 'active' : ""}`} to="/">
                 Home
               </Link>
             </li>
             <li className="nav-item">
               {/* Added the text "About" inside the Link */}
-              <Link className={`nav-link ${location.pathname === '/about' ? 'active' : ''}`} to="/about">
+              <Link className={`nav-link ${location.pathname === '/about' ? 'active' : ""}`} to="/about">
                 About
               </Link>
             </li>
