@@ -22,13 +22,18 @@ const AddNote = () => {
         <form>
           <div className="form-group">
             <label htmlFor="title">Title</label>
-            <input type="text" className="title" id="title" aria-describedby="emailHelp" placeholder="title" name='title' onChange={onchange} />
+            <input type="text" className="form-control" id="title" aria-describedby="emailHelp" placeholder="title" name='title' onChange={onchange} />
           </div>
 
 
           <div className="form-group my-3">
             <label htmlFor="description">Description</label>
-            <input type="text" className="description" id="description" placeholder="Description" name='description' onChange={onchange} />
+            <input type="text" className="form-control" id="description" placeholder="Description" name='description' onChange={onchange} />
+          </div>
+
+          <div className="form-group my-3">
+            <label htmlFor="tag">tag</label>
+            <input type="text" className="form-control" id="tag" placeholder="tag" name='tag' onChange={onchange} />
           </div>
 
 
