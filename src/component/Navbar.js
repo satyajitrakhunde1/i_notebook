@@ -1,13 +1,17 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation,useNavigate } from 'react-router-dom';
+
 
 const Navbar = () => {
-  // Getting the location (like "/" "/about"). We can write logic accordingly
-  let location = useLocation();
 
-  // useEffect(() => {
-    console.log(location.pathname);
-  // }, [location]);
+  const navigate = useNavigate();
+  
+  const handlelogout =()=>{
+    localStorage.removeItem('token');
+    navigate("/login")
+  }
+
+  let location = useLocation();
 
   return (
     <div>
@@ -35,17 +39,22 @@ const Navbar = () => {
               </Link>
             </li>
             <li className="nav-item">
-              {/* Added the text "About" inside the Link */}
               <Link className={`nav-link ${location.pathname === '/about' ? 'active' : ""}`} to="/about">
                 About
               </Link>
             </li>
           </ul>
         </div>
-          <form className="d-flex">
-  <Link className="btn btn-primary mx-2" to="/login" role="button">Login </Link>
-  <Link className="btn btn-primary mx-2" to="/signup" role="button">Sign Up</Link> 
-</form>
+
+        {/* Conditional rendering for login/logout buttons */}
+        {localStorage.getItem('token') ? (
+          <button className="btn btn-primary" onClick={handlelogout}>Logout</button> 
+        ) : (
+          <div> {/* Wrap elements in a parent div */}
+            <Link className="btn btn-primary mx-2" to="/login" role="button">Login</Link>
+            <Link className="btn btn-primary mx-2" to="/signup" role="button">Sign Up</Link> 
+          </div>
+        )}
       </nav>
     </div>
   );

@@ -21,7 +21,7 @@ const handlesubmit=async(e)=>{
       if(json.authToken){
         //save the auth token and redirect
 localStorage.setItem('token',json.authToken)
-navigate("/login");
+navigate("/");
 props.showAlert("Account created successfullly","success")
       }else{
         // alert("choose the correct password")
@@ -34,7 +34,8 @@ const onchange = (e) => {
   }
 
   return (
-    <div className='container '>
+    <div className='container mt-2 py-1 '>
+      <h2>Create an account to use iNotebook</h2>
      <form onSubmit={handlesubmit}>
   <div className="form-group">
     <label htmlFor="exampleInputEmail1">name</label>
