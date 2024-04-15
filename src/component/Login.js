@@ -21,8 +21,8 @@ const handlesubmit=async(e)=>{
       if(json.success){
         //save the auth token and redirect
 localStorage.setItem('token',json.authToken)
-navigate("/");
 props.showAlert("Logged in seccessfully","success")
+navigate("/");
       }else{
         // alert("invalid credentials")
         props.showAlert("Invalid Details","danger")
