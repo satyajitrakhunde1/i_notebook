@@ -39,19 +39,8 @@ const addNote =async(title,description,tag)=>{
     body: JSON.stringify({title,description,tag}), // body data type must match "Content-Type" header
   });
 
-
-  //client add note logic
-  console.log("adding a new note")
- const  note=  {
-    "_id": "66196580f9913486954bfa61e9",
-    "user": "6617cf5d725cba9b44569f90",
-    "title": title,
-    "description": description,
-    "tag": tag,
-    "date": "2024-04-12T16:46:56.052Z",
-    "__v": 0
-  }
-setNotes(notes.concat(note))
+  const note =await response.json()
+  setNotes(notes.concat(note))
 }
 //---------------------------------------------------------------------------------------------
 //Delete a note
